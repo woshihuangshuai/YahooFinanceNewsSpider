@@ -14,6 +14,7 @@ BOT_NAME = 'YahooFinanceNewsSpider'
 SPIDER_MODULES = ['YahooFinanceNewsSpider.spiders']
 NEWSPIDER_MODULE = 'YahooFinanceNewsSpider.spiders'
 
+RETRY_ENABLED = False
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'YahooFinanceNewsSpider (+http://www.yourdomain.com)'

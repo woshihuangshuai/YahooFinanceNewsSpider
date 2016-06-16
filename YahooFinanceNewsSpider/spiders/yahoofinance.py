@@ -17,20 +17,15 @@ class YahoofinanceSpider(scrapy.Spider):
         for sel in response.xpath('//table[@id="yfncsumtab"]//ul//li'):
             urls = sel.xpath('a/@href').extract()
             for url in urls:
-                yield scrapy.Request(url, callback=self.parse_dir_contents)
+                print url.split('*')[-1]
+                yield scrapy.Request(url.split('*')[-1], callback=self.parse_dir_contents)
 
     def parse_dir_contents(self, response):
-        sel = response.xpath('//section[@id="mediacontentstory"]')
-
-        # print sel.xpath('//header/h1/text()').extract()
-        # print sel.xpath('//abbr/text()').extract()
-        # print sel.xpath('//div[@class = "body yom-art-content clearfix"]/text()').extract()
-        # print response.url
-
+        sel = response.xpath('//header')
 
         item = YahoofinancenewsspiderItem()
-        item['title'] = sel.xpath('//header/h1/text()').extract()
-        item['datetime'] = sel.xpath('//abbr/text()').extract()
-        item['content'] = sel.xpath('//div[@class = "body yom-art-content clearfix"]/text()').extract()
+        item['title'] = sel.xpath('h1/text()').extract()[0]
+        item['datetime'] = sel.xpath('..//abbr/text()').extract()[0]
+        item['content'] = sel.xpath('../div/p/text() | ../div/p/strong/text()').extract()
         item['link'] = response.url
         yield item
