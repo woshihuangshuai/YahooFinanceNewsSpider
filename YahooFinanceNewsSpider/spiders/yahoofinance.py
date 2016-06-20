@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
+import re
 
 from YahooFinanceNewsSpider.items import YahoofinancenewsspiderItem
 
@@ -14,13 +15,19 @@ class YahoofinanceSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
-        for sel in response.xpath('//table[@id="yfncsumtab"]//ul//li'):
-            urls = sel.xpath('a/@href').extract()
-            for url in urls:
-                print url.split('*')[-1]
-                yield scrapy.Request(url.split('*')[-1], callback=self.parse_dir_contents)
+        for sel in response.xpath('//table[@id="yfncsumtab"]//ul//li/a/@href'):
+            news_content_url = sel.extract()
+            if re.match('http://finance.yahoo.com/news/.*', news_content_url) != None: #onlycrawl news post by yahoo finance
+                print 'news_content_url:', news_content_url
+                yield scrapy.Request(news_content_url, callback=self.parse_yahoo_finance_contents)
 
-    def parse_dir_contents(self, response):
+        next_page_url = response.xpath('//b[a=\'Older Headlines\']/a/@href').extract_first()
+        if next_page_url != None:
+            next_page_url = 'http://finance.yahoo.com' + next_page_url
+            print 'next_page_url:', next_page_url
+            yield scrapy.Request(next_page_url,callback=self.parse)
+
+    def parse_yahoo_finance_contents(self, response):
         sel = response.xpath('//header')
 
         item = YahoofinancenewsspiderItem()
