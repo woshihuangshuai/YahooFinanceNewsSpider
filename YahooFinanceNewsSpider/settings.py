@@ -17,7 +17,8 @@ NEWSPIDER_MODULE = 'YahooFinanceNewsSpider.spiders'
 RETRY_ENABLED = False
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'YahooFinanceNewsSpider (+http://www.yourdomain.com)'
+USER_AGENT = 'mozilla/5.0 (windows nt 6.1; wow64) applewebkit/537.36 (khtml, like gecko) chrome/36.0.1964.4 safari/537.36'
+#'YahooFinanceNewsSpider (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -35,7 +36,7 @@ ROBOTSTXT_OBEY = True
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
@@ -66,9 +67,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'YahooFinanceNewsSpider.pipelines.SomePipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'YahooFinanceNewsSpider.pipelines.YahoofinancenewsspiderPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

@@ -8,4 +8,5 @@
 
 class YahoofinancenewsspiderPipeline(object):
     def process_item(self, item, spider):
+        print item['datetime']
         return item
