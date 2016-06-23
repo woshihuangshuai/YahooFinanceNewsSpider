@@ -11,6 +11,7 @@ import scrapy
 class YahoofinancenewsspiderItem(scrapy.Item):
     # define the fields for your item here like:
     title = scrapy.Field()
+    link = scrapy.Field()
     datetime = scrapy.Field()
     content = scrapy.Field()
-    link = scrapy.Field()
+    

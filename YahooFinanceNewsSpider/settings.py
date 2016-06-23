@@ -17,7 +17,8 @@ NEWSPIDER_MODULE = 'YahooFinanceNewsSpider.spiders'
 RETRY_ENABLED = False
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'mozilla/5.0 (windows nt 6.1; wow64) applewebkit/537.36 (khtml, like gecko) chrome/36.0.1964.4 safari/537.36'
+USER_AGENT = 'YahooFinanceNewsSpider (+http://www.yourdomain.com)'
+#'Mozilla/5.0 (Windows NT 6.1; rv:46.0) Gecko/20100101 Firefox/46.0'
 #'YahooFinanceNewsSpider (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
@@ -39,7 +40,7 @@ ROBOTSTXT_OBEY = True
 COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
-#TELNETCONSOLE_ENABLED = False
+TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
 #DEFAULT_REQUEST_HEADERS = {
@@ -91,3 +92,5 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+#Feed exports
