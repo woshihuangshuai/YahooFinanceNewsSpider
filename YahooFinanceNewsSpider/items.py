@@ -13,5 +13,6 @@ class YahoofinancenewsspiderItem(scrapy.Item):
     title = scrapy.Field()
     link = scrapy.Field()
     datetime = scrapy.Field()
+    corp_name = scrapy.Field()
     content = scrapy.Field()
     

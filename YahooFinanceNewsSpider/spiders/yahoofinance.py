@@ -39,11 +39,15 @@ class YahoofinanceSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
+        corp_name = re.match(r'\w+', response.url.split('=')[1]).group()
         for sel in response.xpath('//table[@id="yfncsumtab"]//ul//li/a/@href'):
             news_content_url = sel.extract()
-            if re.match('http://finance.yahoo.com/news/.*', news_content_url) != None: #onlycrawl news post by yahoo finance
+            if re.match(r'http://finance.yahoo.com/news/.*', news_content_url) != None: 
+            #onlycrawl news post by yahoo finance
                 print 'news_content_url:', news_content_url
-                yield scrapy.Request(news_content_url, callback=self.parse_yahoo_finance_contents)
+                request = scrapy.Request(news_content_url, callback=self.parse_yahoo_finance_contents)
+                request.meta['corp_name'] = corp_name
+                yield request
 
         next_page_url = response.xpath('//b[a=\'Older Headlines\']/a/@href').extract_first()
         if next_page_url != None:
@@ -58,7 +62,8 @@ class YahoofinanceSpider(scrapy.Spider):
             item = YahoofinancenewsspiderItem()
             item['title'] = sel.xpath('//header/h1[@class="headline"]/text()').extract_first()
             item['link'] = response.url
-            item['datetime'] = sel.xpath('//abbr/text()').extract()_first()
+            item['datetime'] = sel.xpath('//abbr/text()').extract_first()
+            item['corp_name'] = response.meta['corp_name']
             item['content'] = sel.xpath('//div/p/descendant::text()').extract()
             return item
             
@@ -85,6 +90,7 @@ class YahoofinanceSpider(scrapy.Spider):
         item['title'] = response.xpath('//div[@class="wrapper-content"]/h1/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//div[@class="wrapper-content"]//time/text()').extract_first()
+        item['corp_name'] = response.meta['corp_name']
         item['content'] = response.xpath('//div[@class="wrapper-content"]/div[@class="post-content"]//descendant-or-self::text()').extract()
         return item
 
@@ -99,6 +105,7 @@ class YahoofinanceSpider(scrapy.Spider):
         item['title'] = response.xpath('//h1[@id="articleTitle"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//div[@id="articleDate"]/text()').extract_first().split('\t')[-1]
+        item['corp_name'] = response.meta['corp_name']
         item['content'] = response.xpath('//div[@id="articleBody"]/descendant::text()').extract()
         return item
 
@@ -111,15 +118,17 @@ class YahoofinanceSpider(scrapy.Spider):
         item['title'] = response.xpath('//h1[@itemprop="headline"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//time[@itemprop="datePublished"]/@datetime').extract_first()
+        item['corp_name'] = response.meta['corp_name']
         item['content'] = response.xpath('//div[@itemprop="articleBody"]/descendant::text()').extract()
         return item
 
-    #http://www.investors.com
+    # http://www.investors.com
     def parse_investors_contents(self, response):
         item = YahoofinancenewsspiderItem()
         item['title'] = response.xpath('//h1[@class="header1"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//li[@class="post-time"]/text()').extract_first()
+        item['corp_name'] = response.meta['corp_name']
         item['content'] = response.xpath('//article/div/descendant::text()').extract()
         return item
 
@@ -129,6 +138,7 @@ class YahoofinanceSpider(scrapy.Spider):
         item['title'] = response.xpath('//div[@id="Content"]/div[1]/h1/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//span[@class="by-author "]/text()').extract()[-1].split('|')[-1]
+        item['corp_name'] = response.meta['corp_name']
         item['content'] = response.xpath('//article/div[@class="content-box"]/descendant::text()').extract()
         return item
 
@@ -138,18 +148,9 @@ class YahoofinanceSpider(scrapy.Spider):
         item['title'] = response.xpath('//article/div[2]/h1/a/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//h6[@class="by-line"]/text()').extract_first().split('on')[-1]
+        item['corp_name'] = response.meta['corp_name']
         item['content'] = response.xpath('//div[@class="content-without-wrap entry single-content"]/descendant::text()').extract()
         return item
-
-    #http://www.ft.com
-    #error code 301
-    def parse_ft_contents(self, response):
-        pass
-
-    #http://www.foxbusiness.com
-    #error code 301
-    def parse_foxbusiness_contents(self, response):
-        pass
 
     #http://www.forbes.com
     #can't get content
@@ -167,7 +168,14 @@ class YahoofinanceSpider(scrapy.Spider):
     #http://sgi.seleritycorp.com
     #http://portal.kiplinger.com
     #http://news.investors.com
+    # http://portal.kiplinger.com
+    # http://www.foxbusiness.com
+    # http://www.ft.com
+    # http://wallstcheatsheet.com
     #error code 301
+
+    # http://news.morningstar.com need a member ID
+    # http://online.wsj.com can't connect
 
     #http://www.capitalcube.com
     def parse_capitalcube_contents(self, response):
@@ -175,6 +183,7 @@ class YahoofinanceSpider(scrapy.Spider):
         item['title'] = response.xpath('//header[@class="entry-header"]/h1/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//abbr[@class="published"]/@title').extract_first()
+        item['corp_name'] = response.meta['corp_name']
         item['content'] = response.xpath('//div[@class="entry-content"]/descendant::text()').extract()
         return item        
 
@@ -185,12 +194,16 @@ class YahoofinanceSpider(scrapy.Spider):
     #http://www.bizjournals.com
     #error code 456, Access To Website Blocked
 
-    #http://www.barrons.com
-    #http://qz.com
-    #no precise datetime
-
-    #http://realmoney.thestreet.com
-    #error code 403
+    # http://realmoney.thestreet.com
+    # need set USER_AGENT
+    def parse_thestreet_contents(self, response):
+        item = YahoofinancenewsspiderItem()
+        item['title'] = response.xpath('//div[@class="headline"]/h2/text()').extract_first()
+        item['link'] = response.url
+        item['datetime'] = response.xpath('//div[@class="date"]/text()').extract_first()
+        item['corp_name'] = response.meta['corp_name']
+        item['content'] = response.xpath('//div[@class="content"]/descendant::text()').extract()
+        return item 
 
     #http://marketrealist.com
     def parse_marketrealist_contents(self, response):
@@ -198,15 +211,82 @@ class YahoofinanceSpider(scrapy.Spider):
         item['title'] = response.xpath('//h2[@class="multipart-article-title"]/span/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//span[@class="authored_date"]/text()').extract()[-1]
-        item['content'] = esponse.xpath('//div[@class="article"]/descendant::text()').extract()
+        item['corp_name'] = response.meta['corp_name']
+        item['content'] = response.xpath('//div[@class="article"]/descendant::text()').extract()
         return item         
 
-    #http://fortune.com
-    #no content 
-    def parse_fortune_contents(self, response):
+    # http://247wallst.com
+    def parse_247wallst_contents(self, response):
         item = YahoofinancenewsspiderItem()
         item['title'] = response.xpath('//h1[@class="entry-title"]/text()').extract_first()
         item['link'] = response.url
-        item['datetime'] = response.xpath('//time[@itemprop="datePublished"]/text()').extract_first()
-        item['content'] = esponse.xpath('//div[@class="article"]/descendant::text()').extract()
+        item['datetime'] = response.xpath('//span[@class="timestamp"]/text()').extract_first()
+        item['corp_name'] = response.meta['corp_name']
+        item['content'] = response.xpath('//div[@class="entry-content"]/descendant::text()').extract()
         return item  
+
+    # http://bits.blogs.nytimes.com
+    # http://blogs.wsj.com
+    # connection time out
+
+    # http://blogs.barrons.com
+    def parse_barrons_contents(self, response):
+        item = YahoofinancenewsspiderItem()
+        item['title'] = response.xpath('//div[@class="articleHeadlineBox headlineType-newswire"]/h1/text()').extract_first()
+        item['link'] = response.url
+        item['datetime'] = response.xpath('//li[@class="dateStamp first"]/small/text()').extract_first()
+        item['corp_name'] = response.meta['corp_name']
+        item['content'] = response.xpath('//div[@class="articlePage"]/descendant::text()').extract()
+        return item  
+
+    # http://fortune.com
+    def parse_fortune_contents(self, response):
+        item = YahoofinancenewsspiderItem()
+        item['title'] = response.xpath('//h1/text()').extract_first()
+        item['link'] = response.url
+        item['datetime'] = response.xpath('//time/text()').extract_first()
+        item['corp_name'] = response.meta['corp_name']
+        item['content'] = response.xpath('//article/descendant::text()').extract()
+        return item  
+
+    # http://money.cnn.com
+    def parse_moneycnn_contents(self, response):
+        item = YahoofinancenewsspiderItem()
+        item['title'] = response.xpath('//h1[@class="article-title"]/text()').extract_first()
+        item['link'] = response.url
+        item['datetime'] = response.xpath('//span[@class="cnnDateStamp"]/text()').extract_first()
+        item['corp_name'] = response.meta['corp_name']
+        item['content'] = response.xpath('//div[@id="storytext"]/descendant::text()').extract()
+        return item
+
+    # http://news.investornetwork.com
+    def parse_investornetwork_contents(self, response):
+        item = YahoofinancenewsspiderItem()
+        item['title'] = response.xpath('//h1[@class="entry-title"]/a/text()').extract_first()
+        item['link'] = response.url
+        item['datetime'] = response.xpath('//header[@class="entry-header"]/p/text()').extract_first()
+        item['corp_name'] = response.meta['corp_name']
+        item['content'] = response.xpath('//div[@class="entry-content"]/descendant::text()').extract()
+        return item
+
+    # http://seekingalpha.com
+    def parse_seekingalpha_contents(self, response):
+        item = YahoofinancenewsspiderItem()
+        item['title'] = response.xpath('//h1[@itemprop="headline"]/text()').extract_first()
+        item['link'] = response.url
+        item['datetime'] = response.xpath('//time[@itemprop="datePublished"]/text()').extract_first()
+        item['corp_name'] = response.meta['corp_name']
+        item['content'] = response.xpath('//div[@class="entry-content"]/descendant::text()').extract()
+        return item
+
+    # https://sgi.seleritycorp.com
+    # http://sgi.seleritycorp.com/4545-2/ OK
+    # http://sgi.seleritycorp.com/earnings-preview-adobe-q2-2015-adbe/ error 301
+    def parse_seleritycorp_contents(self, response):
+        item = YahoofinancenewsspiderItem()
+        item['title'] = response.xpath('//h1[@class="single-post-title"]/text()').extract_first()
+        item['link'] = response.url
+        item['datetime'] = response.xpath('//div[@class="entry-meta"]/p/text()').extract_first()
+        item['corp_name'] = response.meta['corp_name']
+        item['content'] = response.xpath('//div[@itemprop="articleBody"]/descendant::text()').extract()
+        return item
