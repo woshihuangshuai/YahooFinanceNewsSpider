@@ -202,7 +202,7 @@ class YahoofinanceSpider(scrapy.Spider):
         return item         
 
     #http://fortune.com
-    #no content
+    #no content 
     def parse_fortune_contents(self, response):
         item = YahoofinancenewsspiderItem()
         item['title'] = response.xpath('//h1[@class="entry-title"]/text()').extract_first()
