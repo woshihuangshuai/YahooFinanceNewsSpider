@@ -17,7 +17,7 @@ NEWSPIDER_MODULE = 'YahooFinanceNewsSpider.spiders'
 RETRY_ENABLED = False
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'YahooFinanceNewsSpider (+http://www.yourdomain.com)'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; rv:46.0) Gecko/20100101 Firefox/46.0'
 #'Mozilla/5.0 (Windows NT 6.1; rv:46.0) Gecko/20100101 Firefox/46.0'
 #'YahooFinanceNewsSpider (+http://www.yourdomain.com)'
 
