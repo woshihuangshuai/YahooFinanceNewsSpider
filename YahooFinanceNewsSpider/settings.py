@@ -14,7 +14,7 @@ BOT_NAME = 'YahooFinanceNewsSpider'
 SPIDER_MODULES = ['YahooFinanceNewsSpider.spiders']
 NEWSPIDER_MODULE = 'YahooFinanceNewsSpider.spiders'
 
-RETRY_ENABLED = False
+RETRY_ENABLED = True
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; rv:46.0) Gecko/20100101 Firefox/46.0'
@@ -69,7 +69,8 @@ TELNETCONSOLE_ENABLED = False
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'YahooFinanceNewsSpider.pipelines.YahoofinancenewsspiderPipeline': 300,
+   # 'YahooFinanceNewsSpider.pipelines.YahoofinancenewsspiderPipeline': 300,
+   'YahooFinanceNewsSpider.pipelines.MongoPipeline': 1000,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -94,3 +95,7 @@ ITEM_PIPELINES = {
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 #Feed exports
+
+# MongoDB
+MONGO_URI = 'localhost:27017'
+MONGO_DATABASE = 'YahooFinanceNews'
