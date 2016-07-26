@@ -9,13 +9,15 @@ from YahooFinanceNewsSpider.items import IndustrynewsItem
     urls:
         https://biz.yahoo.com/industry/index.html
 
+    total: 88733
+
 '''
 
 
 class IndustrynewsSpider(scrapy.Spider):
     name = "industrynews"
 
-    download_delay = 2 
+    download_delay = 1 
 
     start_urls = [
         "https://biz.yahoo.com/industry/index.html"
@@ -28,8 +30,13 @@ class IndustrynewsSpider(scrapy.Spider):
         for sel in selectors:
             if sel.xpath('a').extract_first() == None:
                 sector = sel.xpath('b/text()').extract_first()
+                if sector != None:
+                    sector = sector.encode('utf8').replace('\n', ' ')
             else:
                 industry = sel.xpath('a/text()').extract_first()
+                if industry != None:
+                    industry = industry.encode('utf8').replace('\n', ' ')
+
                 url = sel.xpath('a/@href').extract_first().split('*')[-1]
                 request = scrapy.Request(url, callback=self.parse_industry_index)
                 request.meta['sector'] = sector
@@ -81,7 +88,7 @@ class IndustrynewsSpider(scrapy.Spider):
             # http://www.fool.com
             elif re.match(r'http://www.fool.com/.*', news_url) != None: 
                 request = scrapy.Request(news_url, callback=self.parse_fool_contents)
-                request.meta['sector'] = sector
+                request.meta['sector'] = response.meta['industry']
                 yield request
             # http://www.capitalcube.com
             elif re.match(r'http://www.capitalcube.com/.*', news_url) != None: 
@@ -221,9 +228,8 @@ class IndustrynewsSpider(scrapy.Spider):
         # get next page url
         next_page_url = response.xpath('//a[b="More Latest News..."]/@href').extract_first()
         if next_page_url != None:
-            next_page_url = 'http://finance.yahoo.com' + next_page_url
             print 'next_page_url:', next_page_url
-            request = scrapy.Request(next_page_url,callback=self.parse)
+            request = scrapy.Request(next_page_url, callback=self.parse_industry_index)
             request.meta['sector'] = response.meta['sector']
             request.meta['industry'] = response.meta['industry']
             yield request
@@ -613,4 +619,4 @@ class IndustrynewsSpider(scrapy.Spider):
             item['content'] = response.xpath('//div[@class="kip-slideshow-content"]/descendant::text()').extract()
             return item
 
-    #---------------------------------------------parse() for NEWS PROVIDERS end--------------------------------------------
+#---------------------------------------------parse() for NEWS PROVIDERS end--------------------------------------------

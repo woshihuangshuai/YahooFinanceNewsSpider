@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import re
-from YahooFinanceNewsSpider.items import YahoofinancenewsspiderItem
+from YahooFinanceNewsSpider.items import CompanynewsItem
+from selenium import webdriver
 
 '''
     Sector News:
@@ -76,7 +77,7 @@ class CompanynewsSpider(scrapy.Spider):
         # "http://finance.yahoo.com/q/h?s=AKAM",
         # "http://finance.yahoo.com/q/h?s=AKS",
         # "http://finance.yahoo.com/q/h?s=ALL",
-        "http://finance.yahoo.com/q/h?s=BSX",
+        "http://finance.yahoo.com/quote/BSX",
         # "http://finance.yahoo.com/q/h?s=C"
     ]
 
@@ -240,11 +241,13 @@ class CompanynewsSpider(scrapy.Spider):
             print 'next_page_url:', next_page_url
             yield scrapy.Request(next_page_url,callback=self.parse)
 
+#---------------------------------------------parse() for NEWS PROVIDERS strat--------------------------------------------
+
     # parse the news content from finance.yahoo.com
     def parse_yahoo_finance_contents(self, response):
         sel = response.xpath('//section[@id="mediacontentstory"]')
         try:
-            item = YahoofinancenewsspiderItem()
+            item = CompanynewsItem()
             item['title'] = sel.xpath('//header/h1[@class="headline"]/text()').extract_first()
             item['link'] = response.url
             item['datetime'] = sel.xpath('//abbr/text()').extract_first()
@@ -262,7 +265,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://www.siliconbeat.com
     def parse_siliconbeat_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//div[@class="wrapper-content"]/h1/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//div[@class="wrapper-content"]//time/text()').extract_first()
@@ -272,7 +275,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://www.latimes.com
     def parse_latimes_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1[@itemprop="headline"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//time[@itemprop="datePublished"]/@datetime').extract_first()
@@ -282,7 +285,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://www.investors.com
     def parse_investors_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1[@class="header1"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//li[@class="post-time"]/text()').extract_first()
@@ -292,7 +295,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://www.investopedia.com
     def parse_investopedia_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//div[@id="Content"]/div[1]/h1/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//span[@class="by-author "]/text()').extract()[-1].split('|')[-1]
@@ -302,7 +305,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://www.insidermonkey.com
     def parse_insidermonkey_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//article/div[2]/h1/a/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//h6[@class="by-line"]/text()').extract_first().split('on')[-1]
@@ -312,7 +315,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://www.fool.com
     def parse_fool_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//ul[@class="topic-list"]/li/text()').extract()[1]
@@ -322,7 +325,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     #http://www.capitalcube.com
     def parse_capitalcube_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//header[@class="entry-header"]/h1/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//abbr[@class="published"]/@title').extract_first()
@@ -333,7 +336,7 @@ class CompanynewsSpider(scrapy.Spider):
     # http://realmoney.thestreet.com
     # need set USER_AGENT
     def parse_thestreet_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//div[@class="headline"]/h2/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//div[@class="date"]/text()').extract_first()
@@ -343,7 +346,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://marketrealist.com
     def parse_marketrealist_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h2[@class="multipart-article-title"]/span/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//span[@class="authored_date"]/text()').extract()[-1]
@@ -353,7 +356,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://247wallst.com
     def parse_247wallst_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1[@class="entry-title"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//span[@class="timestamp"]/text()').extract_first()
@@ -363,7 +366,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://blogs.barrons.com
     def parse_barrons_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//div[@class="articleHeadlineBox headlineType-newswire"]/h1/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//li[@class="dateStamp first"]/small/text()').extract_first()
@@ -373,7 +376,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://fortune.com
     def parse_fortune_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//time/text()').extract_first()
@@ -383,7 +386,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://money.cnn.com
     def parse_moneycnn_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1[@class="article-title"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//span[@class="cnnDateStamp"]/text()').extract_first()
@@ -393,7 +396,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://news.investornetwork.com
     def parse_investornetwork_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1[@class="entry-title"]/a/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//header[@class="entry-header"]/p/text()').extract_first()
@@ -403,7 +406,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://seekingalpha.com
     def parse_seekingalpha_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1[@itemprop="headline"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//time[@itemprop="datePublished"]/text()').extract_first()
@@ -415,7 +418,7 @@ class CompanynewsSpider(scrapy.Spider):
     # http://sgi.seleritycorp.com/4545-2/ OK
     # http://sgi.seleritycorp.com/earnings-preview-adobe-q2-2015-adbe/ error 301
     def parse_seleritycorp_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1[@class="single-post-title"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//div[@class="entry-meta"]/p/text()').extract_first()
@@ -425,7 +428,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://www.capitalcube.com
     def parse_capitalcube_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1[@class="entry-title"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//abbr[@class="published"]/@title').extract_first()
@@ -435,7 +438,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://www.cnbc.com
     def parse_cnbc_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1[@class="title"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//time[@class="datestamp"]/text()').extract_first()
@@ -445,7 +448,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # https://gigaom.com
     def parse_gigaom_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1[@itemprop="headline"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//time[@itemprop="datePublished"]/text()').extract_first()
@@ -455,7 +458,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://www.usatoday.com
     def parse_usatoday_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1[@class="asset-headline"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//span[@class="asset-metabar-time asset-metabar-item nobyline"]/text()').extract_first()
@@ -472,7 +475,7 @@ class CompanynewsSpider(scrapy.Spider):
             request.meta['corp_name'] = response.meta['corp_name']
             return request
         else:
-            item = YahoofinancenewsspiderItem()
+            item = CompanynewsItem()
             item['title'] = response.xpath('//span[@class="mdcPageTitle"]/text()').extract_first()
             item['link'] = response.url
             item['datetime'] = response.xpath('//div[@class="mdcBodyHeader"]/text()').extract_first().split('-')[-1]
@@ -482,7 +485,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://www.mercurynews.com
     def parse_mercurynews_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1[@class="articleTitle"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//div[@id="articleDate"]/text()').extract()[0].split('\t')[-1]
@@ -492,7 +495,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # http://qz.com
     def parse_qz_contents(self, response):
-        item = YahoofinancenewsspiderItem()
+        item = CompanynewsItem()
         item['title'] = response.xpath('//h1[@itemprop="headline"]/text()').extract_first()
         item['link'] = response.url
         item['datetime'] = response.xpath('//span[@class="timestamp"]/text()').extract_first()
@@ -508,7 +511,7 @@ class CompanynewsSpider(scrapy.Spider):
             request.meta['corp_name'] = response.meta['corp_name']
             return request
         else:
-            item = YahoofinancenewsspiderItem()
+            item = CompanynewsItem()
             item['title'] = response.xpath('//h1[@id="article-headline"]/text()').extract_first()
             item['link'] = response.url
             item['datetime'] = response.xpath('//p[@id="published-timestamp"]/span/text()').extract_first()
@@ -524,7 +527,7 @@ class CompanynewsSpider(scrapy.Spider):
             request.meta['corp_name'] = response.meta['corp_name']
             return request
         else:
-            item = YahoofinancenewsspiderItem()
+            item = CompanynewsItem()
             item['title'] = response.xpath('//h1[@itemprop="headline"]/text()').extract_first()
             item['link'] = response.url
             item['datetime'] = response.xpath('//time[@itemprop="datePublished"]/@datetime').extract_first()
@@ -540,7 +543,7 @@ class CompanynewsSpider(scrapy.Spider):
             request.meta['corp_name'] = response.meta['corp_name']
             return request
         else:
-            item = YahoofinancenewsspiderItem()
+            item = CompanynewsItem()
             item['title'] = response.xpath('//h1[@class="t-h4@m- t-h1-b@tp t-h1@tl+ mt-20 mt-15@tp mt-0@m-"]/text()').extract_first()
             item['link'] = response.url
             item['datetime'] = response.xpath('//div[@class="th-meta"]/text()').extract_first()
@@ -557,7 +560,7 @@ class CompanynewsSpider(scrapy.Spider):
             request.meta['corp_name'] = response.meta['corp_name']
             return request
         else:
-            item = YahoofinancenewsspiderItem()
+            item = CompanynewsItem()
             item['title'] = response.xpath('//div[@class="articleHead"]/h1/text()').extract_first()
             item['link'] = response.url
             item['datetime'] = response.xpath('//time[@class="timeStamp"]/@content').extract_first()
@@ -573,7 +576,7 @@ class CompanynewsSpider(scrapy.Spider):
             request.meta['corp_name'] = response.meta['corp_name']
             return request
         else:
-            item = YahoofinancenewsspiderItem()
+            item = CompanynewsItem()
             item['title'] = response.xpath('//h1[@class="title--article"]/text()').extract_first()
             item['link'] = response.url
             item['datetime'] = response.xpath('//div[@class="pubdate"]/text()').extract_first()
@@ -589,7 +592,7 @@ class CompanynewsSpider(scrapy.Spider):
             request.meta['corp_name'] = response.meta['corp_name']
             return request
         else:
-            item = YahoofinancenewsspiderItem()
+            item = CompanynewsItem()
             item['title'] = response.xpath('//h1/text()').extract_first()
             item['link'] = response.url
             item['datetime'] = response.xpath('//meta[@name="PublishDate"]/@content').extract_first()
@@ -597,4 +600,4 @@ class CompanynewsSpider(scrapy.Spider):
             item['content'] = response.xpath('//div[@class="kip-slideshow-content"]/descendant::text()').extract()
             return item
 
-    
+#---------------------------------------------parse() for NEWS PROVIDERS end--------------------------------------------    
