@@ -84,16 +84,14 @@ class CompanynewsSpider(scrapy.Spider):
 
     def parse(self, response):
         corp_name = response.url.split('／')[-1]
-
         urls_list = []
-
-        browser = webdriver.Firefox()
-        browser.get(response.request.url)
 
         num_of_items = 0
         l = 10000
-        
         js = 'var q=document.documentElement.scrollTop=%d' %l 
+
+        browser = webdriver.Firefox()
+        browser.get(response.request.url)
         browser.execute_script(js)
         time.sleep(10)
         items_list = browser.find_elements_by_xpath('//h3/a')
@@ -108,193 +106,196 @@ class CompanynewsSpider(scrapy.Spider):
 
         for item in items_list:
             urls_list.append(item.get_attribute('href'))
-
         browser.quit()
 
-        for i in urls_list:
-            print i
-
+        for url in urls_list:
+            print url
         print 'total', len(urls_list)
 
-        # for sel in response.xpath('//table[@id="yfncsumtab"]//ul//li/a/@href'):
-        #     news_content_url = sel.extract()
-        #     # http://finance.yahoo.com/news/.*
-        #     if re.match(r'http://finance.yahoo.com/news/.*', news_content_url) != None: 
-        #         # print 'news_content_url:', news_content_url
-        #         request = scrapy.Request(news_content_url, callback=self.parse_yahoo_finance_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.siliconbeat.com
-        #     elif re.match(r'http://www.siliconbeat.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_siliconbeat_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.latimes.com
-        #     elif re.match(r'http://www.latimes.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_latimes_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.investors.com
-        #     elif re.match(r'http://www.investors.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_investors_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.investopedia.com
-        #     elif re.match(r'http://www.investopedia.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_investopedia_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.insidermonkey.com
-        #     elif re.match(r'http://www.insidermonkey.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_insidermonkey_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.fool.com
-        #     elif re.match(r'http://www.fool.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_fool_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.capitalcube.com
-        #     elif re.match(r'http://www.capitalcube.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_capitalcube_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://realmoney.thestreet.com
-        #     elif re.match(r'http://realmoney.thestreet.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_thestreet_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://marketrealist.com
-        #     elif re.match(r'http://marketrealist.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_marketrealist_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://247wallst.com
-        #     elif re.match(r'http://247wallst.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_247wallst_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://blogs.barrons.com
-        #     elif re.match(r'http://blogs.barrons.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_barrons_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://fortune.com
-        #     elif re.match(r'http://fortune.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_fortune_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://money.cnn.com
-        #     elif re.match(r'http://money.cnn.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_moneycnn_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://news.investornetwork.com
-        #     elif re.match(r'http://news.investornetwork.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_investornetwork_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://seekingalpha.com
-        #     elif re.match(r'http://seekingalpha.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_seekingalpha_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # https://sgi.seleritycorp.com
-        #     elif re.match(r'https://sgi.seleritycorp.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_seleritycorp_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.capitalcube.com
-        #     elif re.match(r'http://www.capitalcube.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_capitalcube_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.cnbc.com
-        #     elif re.match(r'http://www.cnbc.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_cnbc_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # https://gigaom.com
-        #     elif re.match(r'https://gigaom.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_gigaom_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.usatoday.com
-        #     elif re.match(r'http://www.usatoday.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_usatoday_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.moodys.com
-        #     elif re.match(r'http://www.moodys.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_moodys_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.mercurynews.com
-        #     elif re.match(r'http://www.mercurynews.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_mercurynews_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://qz.com
-        #     elif re.match(r'http://qz.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_qz_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.foxbusiness.com
-        #     elif re.match(r'http://www.foxbusiness.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_foxbusiness_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.engadget.com
-        #     elif re.match(r'http://www.engadget.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_engadget_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://www.cnet.com
-        #     elif re.match(r'http://www.cnet.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_cnet_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://wallstcheatsheet.com
-        #     elif re.match(r'http://wallstcheatsheet.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_wallstcheatsheet_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     # http://portal.kiplinger.com
-        #     elif re.match(r'http://portal.kiplinger.com/.*', news_content_url) != None: 
-        #         request = scrapy.Request(news_content_url, callback=self.parse_kiplinger_contents)
-        #         request.meta['corp_name'] = corp_name
-        #         yield request
-        #     else:
-        #         continue
+        for url in urls_list:
+            # http://finance.yahoo.com/news/.*
+            if re.match(r'http://finance.yahoo.com/news/.*', url) != None: 
+                request = scrapy.Request(url, callback=self.parse_yahoo_news_contents)
+                request.meta['corp_name'] = corp_name
+                yield request
+            # http://finance.yahoo.com/video/.*
+            elif re.match(r'http://finance.yahoo.com/video/.*', url) != None:
+                request = scrapy.Request(url, callback=self.parse_yahoo_video_contents)
+                request.meta['corp_name'] = corp_name
+                yield request
+            # parse other web
+            else:
+                request = scrapy.Request(url, callback=self.parse_other_url)
+                request.meta['corp_name'] = corp_name
+                yield request
 
-        # # parse next page
-        # next_page_url = response.xpath('//b[a=\'Older Headlines\']/a/@href').extract_first()
-        # if next_page_url != None:
-        #     next_page_url = 'http://finance.yahoo.com' + next_page_url
-        #     print 'next_page_url:', next_page_url
-        #     yield scrapy.Request(next_page_url,callback=self.parse)
+    # parse the news content from finance.yahoo.com/news/
+    def parse_yahoo_news_contents(self, response):
+        item = CompanynewsItem()
+        item['title'] = response.xpath('//header/h1/text()').extract_first()
+        item['link'] = response.url
+        item['datetime'] = response.xpath('//span[@class="date D(ib) Fz(11px) Mb(4px)"]/text()').extract_first()
+        item['corp_name'] = response.meta['corp_name']
+        item['content'] = response.xpath('//div[@id="Col1-0-ContentCanvas-Proxy"]/descendant::text()').extract()[:-1]
+        return item
+        
+    # parse the news content from finance.yahoo.com/video/
+    def parse_yahoo_video_contents(self, response):
+        item = CompanynewsItem()
+        item['title'] = response.xpath('//h1/text()').extract_first()
+        item['link'] = response.url
+        item['datetime'] = response.xpath('//span[@class="date D(ib) Fz(11px) Mb(4px)"]/text()').extract_first()
+        item['corp_name'] = response.meta['corp_name']
+        item['content'] = response.xpath('//p/descendant::text()').extract()
+        return item
 
-#---------------------------------------------parse() for NEWS PROVIDERS strat--------------------------------------------
+    # get url which links to other website.
+    def parse_other_url(self, response):
+        url = response.xpath('//a[span="Read More"]/@href').extract_first()
+        corp_name = response.meta['corp_name']
 
-    # parse the news content from finance.yahoo.com
-    def parse_yahoo_finance_contents(self, response):
-        sel = response.xpath('//section[@id="mediacontentstory"]')
-        try:
-            item = CompanynewsItem()
-            item['title'] = sel.xpath('//header/h1[@class="headline"]/text()').extract_first()
-            item['link'] = response.url
-            item['datetime'] = sel.xpath('//abbr/text()').extract_first()
-            item['corp_name'] = response.meta['corp_name']
-            item['content'] = sel.xpath('//div/p/descendant::text()').extract()
-            return item
-            
-        except IndexError, e:
-            print '*'*15, 'error start', '*'*15
-            print 'response.headers:', response.headers
-            print 'response.status:', response.status 
-            print 'response.body:', response.body
-            print sel.xpath('//header/h1[@class="headline"]/text()')
-            print '*'*15, 'error   end', '*'*15
+        # http://www.siliconbeat.com
+        if re.match(r'http://www.siliconbeat.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_siliconbeat_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://www.latimes.com
+        elif re.match(r'http://www.latimes.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_latimes_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://www.investors.com
+        elif re.match(r'http://www.investors.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_investors_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://www.investopedia.com
+        elif re.match(r'http://www.investopedia.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_investopedia_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://www.insidermonkey.com
+        elif re.match(r'http://www.insidermonkey.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_insidermonkey_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://www.fool.com
+        elif re.match(r'http://www.fool.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_fool_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://www.capitalcube.com
+        elif re.match(r'http://www.capitalcube.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_capitalcube_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://realmoney.thestreet.com
+        elif re.match(r'http://realmoney.thestreet.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_thestreet_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://marketrealist.com
+        elif re.match(r'http://marketrealist.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_marketrealist_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://247wallst.com
+        elif re.match(r'http://247wallst.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_247wallst_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://blogs.barrons.com
+        elif re.match(r'http://blogs.barrons.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_barrons_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://fortune.com
+        elif re.match(r'http://fortune.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_fortune_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://money.cnn.com
+        elif re.match(r'http://money.cnn.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_moneycnn_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://news.investornetwork.com
+        elif re.match(r'http://news.investornetwork.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_investornetwork_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://seekingalpha.com
+        elif re.match(r'http://seekingalpha.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_seekingalpha_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # https://sgi.seleritycorp.com
+        elif re.match(r'https://sgi.seleritycorp.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_seleritycorp_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://www.capitalcube.com
+        elif re.match(r'http://www.capitalcube.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_capitalcube_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://www.cnbc.com
+        elif re.match(r'http://www.cnbc.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_cnbc_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # https://gigaom.com
+        elif re.match(r'https://gigaom.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_gigaom_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://www.usatoday.com
+        elif re.match(r'http://www.usatoday.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_usatoday_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://www.moodys.com
+        elif re.match(r'http://www.moodys.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_moodys_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://www.mercurynews.com
+        elif re.match(r'http://www.mercurynews.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_mercurynews_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://qz.com
+        elif re.match(r'http://qz.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_qz_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://www.foxbusiness.com
+        elif re.match(r'http://www.foxbusiness.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_foxbusiness_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://www.engadget.com
+        elif re.match(r'http://www.engadget.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_engadget_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://www.cnet.com
+        elif re.match(r'http://www.cnet.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_cnet_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://wallstcheatsheet.com
+        elif re.match(r'http://wallstcheatsheet.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_wallstcheatsheet_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        # http://portal.kiplinger.com
+        elif re.match(r'http://portal.kiplinger.com/.*', url) != None: 
+            request = scrapy.Request(url, callback=self.parse_kiplinger_contents)
+            request.meta['corp_name'] = corp_name
+            yield request
+        else:
+            return
 
     # http://www.siliconbeat.com
     def parse_siliconbeat_contents(self, response):
