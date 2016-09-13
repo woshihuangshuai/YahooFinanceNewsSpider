@@ -8,7 +8,8 @@ import re
 import string
 from string import maketrans
 import pymongo
-import YahooFinanceNewsSpider.items
+from YahooFinanceNewsSpider.items import IndustrynewsItem
+from YahooFinanceNewsSpider.items import CompanynewsItem
 
 class YahoofinancenewsspiderPipeline(object):
     def process_item(self, item, spider):

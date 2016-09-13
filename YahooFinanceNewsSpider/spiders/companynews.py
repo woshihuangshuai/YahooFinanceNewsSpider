@@ -78,8 +78,8 @@ class CompanynewsSpider(scrapy.Spider):
         # "http://finance.yahoo.com/q/h?s=AKAM",
         # "http://finance.yahoo.com/q/h?s=AKS",
         # "http://finance.yahoo.com/q/h?s=ALL",
-        "https://finance.yahoo.com/quote/BSX",
-        "https://finance.yahoo.com/quote/C"
+        "http://finance.yahoo.com/quote/BSX",
+        # "http://finance.yahoo.com/quote/C"
     ]
 
     def parse(self, response):
@@ -110,7 +110,7 @@ class CompanynewsSpider(scrapy.Spider):
 
         for url in urls_list:
             print url
-        print 'total', len(urls_list)
+        print 'total', '8*'*10, len(urls_list)
 
         for url in urls_list:
             # http://finance.yahoo.com/news/.*
@@ -151,7 +151,8 @@ class CompanynewsSpider(scrapy.Spider):
 
     # get url which links to other website.
     def parse_other_url(self, response):
-        url = response.xpath('//a[@span="Read More"]/@href').extract_first()
+        url = response.xpath('//a[span="Read More"]/@href').extract_first()
+        print url
         corp_name = response.meta['corp_name']
 
         # http://www.siliconbeat.com
