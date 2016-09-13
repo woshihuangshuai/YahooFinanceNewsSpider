@@ -28,7 +28,7 @@ import time
         S&P 500
         http://finance.yahoo.com/quote/<company_name>
 
-    webs can't be scrapyed:
+    websites can't be scrapyed:
         # need login
         http://news.investors.com
         http://www.ft.com
@@ -83,10 +83,9 @@ class CompanynewsSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
-        corp_name = response.url.split('／')[-1]
+        corp_name = response.url.split('/')[-1]
         urls_list = []
 
-        num_of_items = 0
         l = 10000
         js = 'var q=document.documentElement.scrollTop=%d' %l 
 
@@ -96,6 +95,7 @@ class CompanynewsSpider(scrapy.Spider):
         time.sleep(10)
         items_list = browser.find_elements_by_xpath('//h3/a')
         
+        num_of_items = 0
         while num_of_items != len(items_list):
             num_of_items = len(items_list)
             l += 5000
