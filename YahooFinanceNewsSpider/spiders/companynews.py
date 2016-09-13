@@ -83,7 +83,7 @@ class CompanynewsSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
-        corp_name = response.url.split('／')[-1]
+        corp_name = response.url.split('/')[-1]
         urls_list = []
 
         num_of_items = 0
