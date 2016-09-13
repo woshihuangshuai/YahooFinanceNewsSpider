@@ -33,9 +33,6 @@ class YahoofinancenewsspiderPipeline(object):
 
 class MongoPipeline(object):
     """Write items to MongoDB"""
-    industry_news = 'industry_news'
-    company_news = 'company_news'
-
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
         self.mongo_db = mongo_db
@@ -56,10 +53,10 @@ class MongoPipeline(object):
 
     def process_item(self, item, spider):
         if(isinstance(item, IndustrynewsItem)):
-            self.db[self.industry_news].insert(dict(item))
+            self.db['industry_news'].insert(dict(item))
             return item      
         elif(isinstance(item, CompanynewsItem)):
-            self.db[self.company_news].insert(dict(item))
+            self.db['company_news'].insert(dict(item))
             return item
         else:
             return  

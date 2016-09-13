@@ -4,6 +4,7 @@ import re
 from YahooFinanceNewsSpider.items import CompanynewsItem
 from selenium import webdriver
 import time
+from YahooFinanceNewsSpider.companies import S_P_500_companies
 
 '''
     Sector News:
@@ -54,30 +55,6 @@ class CompanynewsSpider(scrapy.Spider):
     download_delay = 2
 
     start_urls = [
-        # "http://finance.yahoo.com/q/h?s=A ",
-        # "http://finance.yahoo.com/q/h?s=AA",
-        # "http://finance.yahoo.com/q/h?s=AAPL",
-        # "http://finance.yahoo.com/q/h?s=ABC",
-        # "http://finance.yahoo.com/q/h?s=ABT",
-        # "http://finance.yahoo.com/q/h?s=ACE",
-        # "http://finance.yahoo.com/q/h?s=ACN ",
-        # "http://finance.yahoo.com/q/h?s=ADBE",
-        # "http://finance.yahoo.com/q/h?s=ADI",
-        # "http://finance.yahoo.com/q/h?s=ADM",
-        # "http://finance.yahoo.com/q/h?s=ADP",
-        # "http://finance.yahoo.com/q/h?s=ADSK",
-        # "http://finance.yahoo.com/q/h?s=AEE",
-        # "http://finance.yahoo.com/q/h?s=AEP",
-        # "http://finance.yahoo.com/q/h?s=AES",
-        # "http://finance.yahoo.com/q/h?s=AET",
-        # "http://finance.yahoo.com/q/h?s=AFL",
-        # "http://finance.yahoo.com/q/h?s=AGN",
-        # "http://finance.yahoo.com/q/h?s=AIG",
-        # "http://finance.yahoo.com/q/h?s=AIV",
-        # "http://finance.yahoo.com/q/h?s=AIZ",
-        # "http://finance.yahoo.com/q/h?s=AKAM",
-        # "http://finance.yahoo.com/q/h?s=AKS",
-        # "http://finance.yahoo.com/q/h?s=ALL",
         "http://finance.yahoo.com/quote/BSX",
         # "http://finance.yahoo.com/quote/C"
     ]
@@ -110,9 +87,10 @@ class CompanynewsSpider(scrapy.Spider):
 
         for url in urls_list:
             print url
-        print 'total', '8*'*10, len(urls_list)
+        print 'total', '*'*10, len(urls_list)
 
         for url in urls_list:
+
             # http://finance.yahoo.com/news/.*
             if re.match(r'http://finance.yahoo.com/news/.*', url) != None: 
                 request = scrapy.Request(url, callback=self.parse_yahoo_news_contents)

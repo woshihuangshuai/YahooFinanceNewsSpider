@@ -7,6 +7,8 @@
 
 import scrapy
 
+class LinksItem(scrapy.Item):
+    link = scrapy.Field()
 
 class CompanynewsItem(scrapy.Item):
     # define the fields for your item here like:
