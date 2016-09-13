@@ -151,7 +151,7 @@ class CompanynewsSpider(scrapy.Spider):
 
     # get url which links to other website.
     def parse_other_url(self, response):
-        url = response.xpath('//a[span="Read More"]/@href').extract_first()
+        url = response.xpath('//a[@span="Read More"]/@href').extract_first()
         corp_name = response.meta['corp_name']
 
         # http://www.siliconbeat.com
