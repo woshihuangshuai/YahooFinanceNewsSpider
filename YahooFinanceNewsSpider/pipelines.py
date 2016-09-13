@@ -8,6 +8,7 @@ import re
 import string
 from string import maketrans
 import pymongo
+import YahooFinanceNewsSpider.items
 
 class YahoofinancenewsspiderPipeline(object):
     def process_item(self, item, spider):
@@ -31,8 +32,8 @@ class YahoofinancenewsspiderPipeline(object):
 
 class MongoPipeline(object):
     """Write items to MongoDB"""
-
-    collection_name = 'industry_news'
+    industry_news = 'industry_news'
+    company_news = 'company_news'
 
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
@@ -53,7 +54,14 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        self.db[self.collection_name].insert(dict(item))
-        return item        
+        if(isinstance(item, IndustrynewsItem)):
+            self.db[self.industry_news].insert(dict(item))
+            return item      
+        elif(isinstance(item, CompanynewsItem)):
+            self.db[self.company_news].insert(dict(item))
+            return item
+        else:
+            return  
+
 
         
