@@ -3,6 +3,7 @@ import scrapy
 import re
 from YahooFinanceNewsSpider.items import LinksItem
 from selenium import webdriver
+import time
 
 class GetlinksSpider(scrapy.Spider):
     name = "getlinks"
@@ -15,8 +16,7 @@ class GetlinksSpider(scrapy.Spider):
     ]
 
     def parse(self, response):
-        corp_name = response.url.split('/')[-1]
-        urls_set = set()
+        urls_list = set()
 
         l = 10000
         js = 'var q=document.documentElement.scrollTop=%d' %l 
@@ -25,9 +25,8 @@ class GetlinksSpider(scrapy.Spider):
         browser.get(response.request.url)
         browser.execute_script(js)
         time.sleep(10)
-        # items_list = browser.find_elements_by_xpath('//h3/a')
-        items_list = browser.find_elements_by_xpath('//ul[@class="Mb(0) Ov(h) P(0) Wow(bw)"]/li')
-
+        items_list = browser.find_elements_by_xpath('//h3/a')
+        
         num_of_items = 0
         while num_of_items != len(items_list):
             num_of_items = len(items_list)
@@ -35,18 +34,17 @@ class GetlinksSpider(scrapy.Spider):
             js = 'var q=document.documentElement.scrollTop=%d' %l
             browser.execute_script(js)
             time.sleep(5)
-            items_list = browser.find_elements_by_xpath('//ul[@class="Mb(0) Ov(h) P(0) Wow(bw)"]/li')
+            items_list = browser.find_elements_by_xpath('//h3/a')
 
         for item in items_list:
-            if(item.find_element_by_xpath('//div[a="Sponsored"]') != None):
-                continue
-                
-            urls_set.add(item.find_element_by_xpath('//h3/a').get_attribute('href'))
-
+            urls_list.add(item.get_attribute('href'))
         browser.quit()
 
-        for url in urls_set:
+        for url in urls_list:
             print url
+
             item = LinksItem()
-            item[link] = url
+            item['link'] = url
             yield item
+            
+        print 'total', '*'*10, len(urls_list)

@@ -241,7 +241,7 @@ class IndustrynewsSpider(scrapy.Spider):
         item = IndustrynewsItem()
         item['title'] = response.xpath('//header/h1/text()').extract_first()
         item['link'] = response.url
-        item['datetime'] = response.xpath('//span[@class="date D(ib) Fz(11px) Mb(4px)"]/text()').extract_first()
+        item['datetime'] = response.xpath('//time[@class="date D(ib) Fz(11px) Mb(4px)"]/@datetime').extract_first()
         item['sector'] = response.meta['sector']
         item['industry'] = response.meta['industry']
         item['content'] = response.xpath('//div[@id="Col1-0-ContentCanvas-Proxy"]/descendant::text()').extract()[:-1]
