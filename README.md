@@ -1,12 +1,13 @@
 # YahooFinanceNewsSpider
-基于scrapy编写的python网络爬虫，用于爬取Yahoo Finance上的财经新闻。
-爬取的新闻包括以下三类：
+A web spider written based Scrapy.This spider is aimed to scrape news on Yahoo Finance.
 
- * 以sector分类的新闻
+The news is divided into three categories:
 
- * 以industry分类的新闻
+ * Sector news
 
- * S&P500中包含的所有公司，按公司分类的新闻数据。
+ * Industry news
+
+ * News about companies in S&P500
 
 # Environment
 
@@ -14,7 +15,7 @@
   
  * MongoDB
   
- * FireFox
+ * Firefox 45.3.0 (The newest Firefox is not supported by Selenium.)
   
  * pip install scrapy / apt install python-scrapy
   
