@@ -49,5 +49,5 @@ The news is divided into three categories:
  * Company News:
 
     Companies in S&P 500:
-    http://finance.yahoo.com/quote/(company_name)
+    http://finance.yahoo.com/quote/ + company abbreviations.(eg: BSX; C; )
 
