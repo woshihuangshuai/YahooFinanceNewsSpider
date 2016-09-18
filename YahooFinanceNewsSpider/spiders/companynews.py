@@ -7,29 +7,8 @@ import time
 from YahooFinanceNewsSpider.companies import S_P_500_companies
 
 '''
-    Sector News:
-        http://finance.yahoo.com/news/sector-basic-materials/?bypass=true
-        
-    Industry News:
-        http://finance.yahoo.com/industries/energy
-        http://finance.yahoo.com/industries/financial
-        http://finance.yahoo.com/industries/healthcare
-        http://finance.yahoo.com/industries/business_services
-        http://finance.yahoo.com/industries/telecom_utilities
-        http://finance.yahoo.com/industries/hardware_electronics
-        http://finance.yahoo.com/industries/software_services
-        http://finance.yahoo.com/industries/industrials
-        http://finance.yahoo.com/industries/manufacturing_materials
-        http://finance.yahoo.com/industries/consumer_products_media
-        http://finance.yahoo.com/industries/diversified_business
-        http://finance.yahoo.com/industries/retailing_hospitality
-        # total: 12
-
-    Company News:
-        S&P 500
-        http://finance.yahoo.com/quote/<company_name>
-
     websites can't be scrapyed:
+
         # need login
         http://news.investors.com
         http://www.ft.com
@@ -48,11 +27,76 @@ from YahooFinanceNewsSpider.companies import S_P_500_companies
         http://www.bloombergview.com
     
     3 kinds of links:
+
         https://finance.yahoo.com/news/...
         https://finance.yahoo.com/m/...
         https://finance.yahoo.com/video/...
 
-        Others is ad.
+        Other links are advertisements.
+
+    News Providers:
+
+        Accesswire(Collected by Yahoo)
+        American City Business Journals(ERROR:Access To Website Blocked.)
+        AP(Collected by Yahoo)
+        The Atlantic(Collected by Yahoo)
+        Bankrate.com(Collected by Yahoo)
+        Barrons.com(WARNING: need login. eg: http://www.barrons.com/articles/home-builder-calatlantics-shares-have-room-to-grow-1474096055?mod=yahoobarrons&ru=yahoo)
+        Benzinga(Collected by Yahoo)
+        Bloomberg(ERROR: There is nothing on this website.)
+        Business Insider(Collected by Yahoo)
+        Business Wire(Collected by Yahoo)
+        BusinessWeek(Collected by Yahoo)
+        Capital Cube(eg: http://www.capitalcube.com/blog/index.php/tal-education-group-price-momentum-supported-by-strong-fundamentals/)
+        CBS Moneywatch(Collected by Yahoo)
+        CNBC(eg: http://www.cnbc.com/2016/09/17/explosion-injuries-reported-in-nycs-chelsea-section.html?__source=yahoo%7Cfinance%7Cheadline%7Cheadline%7Cstory&par=yahoo&doc=103948195)
+        CNNMoney.com
+        CNW Group
+        Consumer Reports
+        Credit.com
+        CreditCards.com
+        DailyFX
+        DailyWorth
+        Engadget
+        Entrepreneur
+        ETF Trends
+        ETFguide
+        Financial Times
+        The Fiscal Times
+        Forbes
+        Fortune
+        Fox Business
+        Gigaom
+        GlobeNewswire
+        GuruFocus
+        Investopedia
+        Investor's Business Daily
+        Kiplinger
+        Los Angeles Times
+        Market Realist
+        MarketWatch
+        Marketwired
+        Money
+        Money Talks News
+        Moody's
+        Morningstar
+        MrTopStep
+        optionMONSTER
+        PR Newswire
+        Reuters
+        San Jose Mercury News
+        Selerity Global Insight
+        TechCrunch
+        TechRepublic
+        TheStreet
+        Thomson Reuters ONE
+        US News & World Report
+        USA TODAY
+        The Wall Street Journal
+        Zacks
+        Zacks Small Cap Research
+        ZD Net
+
 '''
 
 class CompanynewsSpider(scrapy.Spider):
@@ -129,15 +173,13 @@ class CompanynewsSpider(scrapy.Spider):
         item['content'] = response.xpath('//p/descendant::text()').extract()
         return item
 
-    # get url which links to other website.
+# ---------------------------- get url which links to other website. START --------------------------------------
     def parse_outside_url(self, response):
         url = response.xpath('//a[span="Read More"]/@href').extract_first()
         print 'Parsing:', url
 
         datetime = response.xpath('//time[@class="date D(ib) Fz(11px) Mb(4px)"]/@datetime').extract_first()
         corp_name = response.meta['corp_name']
-
-        print datetime
 
         # http://www.siliconbeat.com
         if re.match(r'https?://www.siliconbeat.com/.*', url) != None: 
@@ -309,7 +351,9 @@ class CompanynewsSpider(scrapy.Spider):
             yield request
         else:
             return
+# ---------------------------- get url which links to other website. END --------------------------------------
 
+# ------------------------------------------parse() for NEWS PROVIDERS START-------------------------------------------
     # http://www.siliconbeat.com
     def parse_siliconbeat_contents(self, response):
         item = CompanynewsItem()
@@ -647,4 +691,4 @@ class CompanynewsSpider(scrapy.Spider):
             item['content'] = response.xpath('//div[@class="kip-slideshow-content"]/descendant::text()').extract()
             return item
 
-#---------------------------------------------parse() for NEWS PROVIDERS end--------------------------------------------    
+#---------------------------------------------parse() for NEWS PROVIDERS END--------------------------------------------    
