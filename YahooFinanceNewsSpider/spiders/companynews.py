@@ -50,52 +50,57 @@ from YahooFinanceNewsSpider.companies import S_P_500_companies
         Capital Cube(eg: http://www.capitalcube.com/blog/index.php/tal-education-group-price-momentum-supported-by-strong-fundamentals/)
         CBS Moneywatch(Collected by Yahoo)
         CNBC(eg: http://www.cnbc.com/2016/09/17/explosion-injuries-reported-in-nycs-chelsea-section.html?__source=yahoo%7Cfinance%7Cheadline%7Cheadline%7Cstory&par=yahoo&doc=103948195)
-        CNNMoney.com
-        CNW Group
-        Consumer Reports
-        Credit.com
-        CreditCards.com
-        DailyFX
-        DailyWorth
-        Engadget
-        Entrepreneur
-        ETF Trends
-        ETFguide
-        Financial Times
-        The Fiscal Times
-        Forbes
-        Fortune
-        Fox Business
-        Gigaom
-        GlobeNewswire
-        GuruFocus
-        Investopedia
-        Investor's Business Daily
-        Kiplinger
-        Los Angeles Times
-        Market Realist
-        MarketWatch
-        Marketwired
-        Money
-        Money Talks News
-        Moody's
-        Morningstar
-        MrTopStep
-        optionMONSTER
-        PR Newswire
-        Reuters
-        San Jose Mercury News
-        Selerity Global Insight
-        TechCrunch
-        TechRepublic
-        TheStreet
-        Thomson Reuters ONE
-        US News & World Report
-        USA TODAY
-        The Wall Street Journal
-        Zacks
-        Zacks Small Cap Research
-        ZD Net
+        CNNMoney.com（ERROR: GFW）
+        CNW Group(Collected by Yahoo)
+        Consumer Reports(Collected by Yahoo)
+        Credit.com(Collected by Yahoo)
+        CreditCards.com(Collected by Yahoo)
+        DailyFX(Collected by Yahoo)
+        DailyWorth(Collected by Yahoo)
+        Engadget(eg: https://www.engadget.com/2016/09/07/nintendo-loses-a-little-piece-of-its-identity-with-super-mario/?ncid=txtlnkusaolp00000589)
+        Entrepreneur(Collected by Yahoo)
+        ETF Trends(Collected by Yahoo)
+        ETFguide(Collected by Yahoo)
+        Financial Times(eg: https://www.ft.com/content/a879bd44-7df8-11e6-8e50-8ec15fb462f4?ftcamp=traffic/partner/feed_headline/us_yahoo/auddev)
+        The Fiscal Times(Collected by Yahoo)
+        Forbes(eg: http://www.forbes.com/sites/panosmourdoukoutas/2016/09/18/indias-semi-soviet-semi-latin-model/?utm_source=yahoo&utm_medium=partner&utm_campaign=yahootix&partner=yahootix#3b9995ee6d45)
+        Fortune(eg: http://fortune.com/2015/11/04/tech-job-buzzwords/?xid=yahoo_fortune)
+        Fox Business(Collected by Yahoo)
+        Gigaom(eg: https://gigaom.com/2016/09/12/fluke-briefing-report-closing-the-gap-between-things-and-reality/?utm_medium=content&utm_campaign=syndication&utm_source=yfinance&utm_content=fluke-briefing-report-closing-the-gap-between-things-and-reality_950831
+        https://gigaom.com/2016/09/07/welcome-to-the-post-email-enterprise-what-skype-teams-means-in-a-slack-centered-world/?utm_medium=content&utm_campaign=syndication&utm_source=yfinance&utm_content=welcome-to-the-post-email-enterprise-what-skype-teams-means-in-a-slack-centered-world_950811)
+        GlobeNewswire(Collected by Yahoo)
+        GuruFocus(Collected by Yahoo)
+        Investopedia(eg: http://www.investopedia.com/articles/company-insights/091816/how-blockchain-technology-could-free-billions-banks-ubs-bk.asp?partner=YahooSA)
+        Investor's Business Daily(eg: http://www.investors.com/news/technology/apple-supplier-cirrus-logic-delivers-perfect-example-of-a-reversal/
+        http://www.investors.com/politics/editorials/will-terrorist-attacks-be-the-new-normal/)
+        Kiplinger(eg: http://www.kiplinger.com/article/investing/T018-C008-S001-3-dividend-paying-tech-stocks-selling-at-a-bargain.html?rid=SYN-yahoo&rpageid=15473
+        http://wealth.kiplinger.com/reader/kiplinger/do-low-volatility-products-belong-in-your-portfolio)
+        Los Angeles Times(eg: http://www.latimes.com/entertainment/envelope/cotown/la-et-ct-sully-blair-witch-bridget-jones-20160908-snap-story.html)
+        Market Realist(eg: http://marketrealist.com/2016/09/clarcor-to-become-sole-supplier-for-ge-filtration-system/?utm_source=yahoo&utm_medium=feed)
+        MarketWatch(eg: http://www.marketwatch.com/story/the-points-guy-brian-kelly-once-you-fly-first-class-you-cant-go-back-to-coach-2016-09-15?siteid=yhoof2
+        http://www.marketwatch.com/video/bodyhackers-implant-rfid-chips-to-customize-themselves/3CCB4569-D6FF-4D05-A5A0-CB63BB9D295A.html)
+        Marketwired(Collected by Yahoo)
+        Money(ERROR: GFW)
+        Money Talks News(Collected by Yahoo)
+        Moody's(eg: https://www.moodys.com/research/Moodys-assigns-Aa2-rating-to-Lexington-Fayette-Urban-County-Airport--PR_903546105?WT.mc_id=AM~WWFob29fRmluYW5jZV9TQl9SYXRpbmcgTmV3c19BbGxfRW5n~20160916_PR_903546105)
+        Morningstar(eg: http://news.morningstar.com/articlenet/article.aspx?id=769337&SR=Yahoo)
+        MrTopStep(Collected by Yahoo)
+        optionMONSTER(Collected by Yahoo)
+        PR Newswire(Collected by Yahoo)
+        Reuters(Collected by Yahoo)
+        San Jose Mercury News(eg: http://www.siliconbeat.com/2016/09/16/proposed-oakland-school-wins-10m-national-contest-backed-laurene-powell-jobs/)
+        Selerity Global Insight(eg: https://sgi.seleritycorp.com/earnings-preview-bed-bath-beyond-q2-2016-bbby/)
+        TechCrunch(eg: https://techcrunch.com/2016/09/18/higher-education-goes-hollywood/?ncid=txtlnkusaolp00000591)
+        TechRepublic(eg: http://www.techrepublic.com/article/an-excel-conditional-format-that-expands-with-grouped-data/#ftag=YHF87e0214)
+        TheStreet(eg: http://realmoney.thestreet.com/articles/09/18/2016/cracks-are-widening-financials-charts?puc=yahoo&cm_ven=YAHOO)
+        Thomson Reuters ONE(Collected by Yahoo)
+        US News & World Report(Collected by Yahoo)
+        USA TODAY(eg: http://www.usatoday.com/story/money/2016/06/14/chick-fil-a-opens-on-sunday-to-feed-orlando-blood-donors/85868494/
+        http://247wallst.com/special-report/2016/06/15/50-mcdonalds-menu-items-with-the-most-calories/)
+        The Wall Street Journal(ERROR: GFW)
+        Zacks(Collected by Yahoo)
+        Zacks Small Cap Research(Collected by Yahoo)
+        ZD Net(eg: http://www.zdnet.com/article/new-relic-hires-its-first-chief-information-officer/#ftag=YHFb1d24ec)
 
 '''
 
