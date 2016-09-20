@@ -410,6 +410,7 @@ class CompanynewsSpider(scrapy.Spider):
             redirect_url = response.urljoin(response.headers['Location'])
             request = scrapy.Request(redirect_url, callback=self.parse_kiplinger_contents)
             request.meta['corp_name'] = response.meta['corp_name']
+            request.meta['datetime'] = response.meta['datetime']
             return request
         else:
             item = CompanynewsItem()
@@ -418,7 +419,6 @@ class CompanynewsSpider(scrapy.Spider):
             item['datetime'] = response.meta['datetime']
             item['corp_name'] = response.meta['corp_name']
             item['content'] = response.xpath('//div[@class="kip-column-content kip-column-page1"]/descendant::text()').extract()
-
             return item
 
     # http://www.latimes.com
@@ -447,14 +447,15 @@ class CompanynewsSpider(scrapy.Spider):
             redirect_url = response.urljoin(response.headers['Location'])
             request = scrapy.Request(redirect_url, callback=self.parse_marketwatch_contents)
             request.meta['corp_name'] = response.meta['corp_name']
+            request.meta['datetime'] = response.meta['datetime']
             return request
         else:
             item = CompanynewsItem()
-            item['title'] = response.xpath('//h1[@id="article-headline"]/text()').extract_first()
+            item['title'] = response.xpath('//h1/text()').extract_first()
             item['link'] = response.url
             item['datetime'] = response.meta['datetime']
             item['corp_name'] = response.meta['corp_name']
-            item['content'] = response.xpath("//article/descendant::text()").extract()
+            item['content'] = response.xpath('//article//descendant::text()').extract()
             return item 
 
     # http://www.moodys.com
@@ -463,6 +464,7 @@ class CompanynewsSpider(scrapy.Spider):
             redirect_url = response.urljoin(response.headers['Location'])
             request = scrapy.Request(redirect_url, callback=self.parse_moodys_contents)
             request.meta['corp_name'] = response.meta['corp_name']
+            request.meta['datetime'] = response.meta['datetime']
             return request
         else:
             item = CompanynewsItem()
