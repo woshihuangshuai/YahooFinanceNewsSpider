@@ -17,11 +17,17 @@ The news is divided into three categories:
   
  * Firefox 45.3.0 (The newest Firefox is not supported by Selenium.)
   
- * pip install scrapy / apt install python-scrapy
+ * Scrapy
+
+    [sudo] pip install scrapy / apt install python-scrapy
   
- * pip install -U selenium
+ * Selenium
+
+    [sudo] pip install -U selenium
   
- * pip install pymongo
+ * Pymongo
+
+    [sudo] pip install pymongo
 
 # News Links
 
