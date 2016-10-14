@@ -4,12 +4,14 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
+
+from string                         import maketrans
+from YahooFinanceNewsSpider.items   import IndustrynewsItem
+from YahooFinanceNewsSpider.items   import CompanynewsItem
+import pymongo
 import re
 import string
-from string import maketrans
-import pymongo
-from YahooFinanceNewsSpider.items import IndustrynewsItem
-from YahooFinanceNewsSpider.items import CompanynewsItem
+
 
 class YahoofinancenewsspiderPipeline(object):
     def process_item(self, item, spider):
@@ -34,28 +36,39 @@ class YahoofinancenewsspiderPipeline(object):
 class MongoPipeline(object):
     """Write items to MongoDB"""
     def __init__(self, mongo_uri, mongo_db):
-        self.mongo_uri = mongo_uri
-        self.mongo_db = mongo_db
+        self.mongo_uri  = mongo_uri
+        self.mongo_db   = mongo_db
 
     @classmethod
     def from_crawler(cls, crawler):
         return cls(
-            mongo_uri = crawler.settings.get('MONGO_URI'),
-            mongo_db = crawler.settings.get('MONGO_DATABASE')
+            mongo_uri   = crawler.settings.get('MONGO_URI'),
+            mongo_db    = crawler.settings.get('MONGO_DATABASE')
         )
 
     def open_spider(self, spider):
-        self.client = pymongo.MongoClient(self.mongo_uri)
-        self.db = self.client[self.mongo_db]
+        self.client     = pymongo.MongoClient(self.mongo_uri)
+        self.db         = self.client[self.mongo_db]
 
     def close_spider(self, spider):
         self.client.close()
 
     def process_item(self, item, spider):
+        http    = 'http://'
+        https   = 'https://'
+        url     = item['link'].split('//')[-1]
         if(isinstance(item, IndustrynewsItem)):
+            if(self.db['industry_news'].find({'link': http + url}).count() != 0):
+                return
+            if(self.db['industry_news'].find({'link': https + url}).count() != 0):
+                return
             self.db['industry_news'].insert(dict(item))
             return item      
         elif(isinstance(item, CompanynewsItem)):
+            if(self.db['company_news'].find({'link': http + url}).count() != 0):
+                return
+            if(self.db['company_news'].find({'link': https + url}).count() != 0):
+                return
             self.db['company_news'].insert(dict(item))
             return item
         else:
