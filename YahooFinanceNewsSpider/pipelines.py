@@ -16,6 +16,8 @@ import string
 class YahoofinancenewsspiderPipeline(object):
     def process_item(self, item, spider):
 
+        if item['content'] = None:
+            return
         # intab = string.punctuation + '～！@＃¥％……&＊（）｛｝［］｜、；：‘“，。／？《》＝＋－——｀'
         # outtab = ' '*len(intab)
         # trans_tab = maketrans(intab, outtab)
