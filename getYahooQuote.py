@@ -18,7 +18,7 @@ import collections
 def ConnectMongoDB():
     client = MongoClient('localhost', 27017)
     db = client['Quote']
-    collection = db['YahooFianceQuote']
+    collection = db['YahooFinanceQuote']
     return collection
 
 
