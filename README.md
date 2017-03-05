@@ -57,3 +57,6 @@ The news is divided into three categories:
     Companies in S&P 500:
     http://finance.yahoo.com/quote/ + company abbreviations.(eg: BSX; C; )
 
+# Use it
+
+  * scarpy crawl companynews/sectornews
