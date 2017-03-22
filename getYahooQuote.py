@@ -8,12 +8,14 @@
 数据构成：日期, 开盘时间, 收盘时间, 股价列表
 '''
 
-from pymongo import MongoClient
-from urllib.request import urlopen
-from YahooFinanceNewsSpider.companies import S_P_500_companies
-import json
 import collections
+import json
 import logging
+from urllib.request import urlopen
+
+from pymongo import MongoClient
+
+from YahooFinanceNewsSpider.companies import S_P_500_companies
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',

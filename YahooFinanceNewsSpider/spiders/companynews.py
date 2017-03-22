@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-import scrapy
 import re
-from YahooFinanceNewsSpider.items import CompanynewsItem
-from selenium import webdriver
 import time
+
+import scrapy
+from selenium import webdriver
 from YahooFinanceNewsSpider.companies import S_P_500_companies
+from YahooFinanceNewsSpider.items import CompanynewsItem
+
 
 '''
     3 kinds of links:

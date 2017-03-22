@@ -2,4 +2,4 @@
 *.pyc
 links
 *.log
-/.vscode
+/.vscode/*
